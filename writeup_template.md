@@ -71,9 +71,15 @@ The grayscale image is processed using GaussianBlur to reduce the noise and smoo
 
  ![alt text][image6]
 
+### 2. Results
+
+<p align="center">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidYellowLeft.gif" width="400" height="270" border="10">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidWhiteRight.gif" width="400" height="270" border="10">
+</p>
 
 
-### 2. Identify potential shortcomings with your current pipeline
+### 3. Identify potential shortcomings with your current pipeline
 
 The current pipeline has several shortcoming and limitations.
 
@@ -82,7 +88,7 @@ The current pipeline has several shortcoming and limitations.
 * The algorithm will only work fine, when the brightness and the contrast of the image is good, as the algorithm is based on the edge detection technique.
 
 
-### 3. Suggest possible improvements to your pipeline
+### 4. Suggest possible improvements to your pipeline
 
 * Pre-process the image to adjust the contrast and brightness of the image to properly detect the edges.
 
