@@ -1,56 +1,93 @@
-# **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+# **Lane Detection: Using Edge Detection**
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
-
-Overview
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**Finding Lane Lines on the Road**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
 
 
-Creating a Great Writeup
+[//]: # (Image References)
+
+[image1]: ./test_images_output/gray_solidYellowLeft.jpg "Grayscale"
+[image2]: ./test_images_output/blur_gray_solidYellowLeft.jpg "Grayscale_Blur"
+[image3]: ./test_images_output/canny_image_solidYellowLeft.jpg "Canny"
+[image4]: ./test_images_output/masked_image_solidYellowLeft.jpg "Canny_masked"
+[image5]: ./test_images_output/line_img_solidYellowLeft.jpg "Line"
+[image6]: ./test_images_output/final_solidYellowLeft.jpg "Result"
+
 ---
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+### 1. Results
 
-1. Describe the pipeline
+<p align="center">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidYellowLeft.gif" width="400" height="270" border="10">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidWhiteRight.gif" width="400" height="270" border="10">
+</p>
 
-2. Identify any shortcomings
+### 2. Pipeline
 
-3. Suggest possible improvements
+My pipeline consisted of 6 steps.
 
-We encourage using images in your writeup to demonstrate how your pipeline works.  
+`Step 1 : Grayscale `
 
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
+The RGB image is converted to grayscale image.
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
+![alt text][image1]
+
+`Step 2 :Noise Reduction `
+
+The grayscale image is processed using GaussianBlur to reduce the noise and smoothen the image.kernel size =3 was used for denoisining.
+
+![alt text][image2]
+
+ `Step 3 :Edge Detection`
+
+ Once the gracscale image is smoothened, Canny transform is applied on the smoothened grayscale image to detect the edges in the images.Low threshold = 50 & high threshold = 150 were used for edge detection.
+
+ ![alt text][image3]
+
+ `Step 4 :Image Masking`
+
+ We know that the the lanes will always be in the specific area of the image. Hence we used masking to keep only the lane specific area after edge detection. All other areas apart from the lane region were removed.
+
+![alt text][image4]
+
+ `Step 5 : Hough Transformation`
+
+ The masked image was processed and used to detect the edge coordinates in pixel.Using Hough transformation, staring and end coordinates of the all the edges were returned in the form of array.
+
+ ![alt text][image5]
+
+ `Step 6 : Draw Lines`
+
+ Once we had the set of coordinates representing the lines. The first task was to separate left lane coordinate set from right lane coordinate set.
+ I used the slope information to separate these two, as left lane lines will have negative slope and right lane line will have positive slope. I stored the the set of left lane lines and right lane lines in two separate arrays.
+
+ For each lane lines, we calculated the weighted mean slope and intercept.
+
+ We used this information to draw the lines on the original image.
+
+ ![alt text][image6]
 
 
-The Project
----
+### 3. Identify potential shortcomings with your current pipeline
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+The current pipeline has several shortcoming and limitations.
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/83ec35ee-1e02-48a5-bdb7-d244bd47c2dc/lessons/8c82408b-a217-4d09-b81d-1bda4c6380ef/concepts/4f1870e0-3849-43e4-b670-12e6f2d4b7a7) if you haven't already.
+* This algorithm is hardcoded to mask certain region.If the front are not in that region, the algorithm will not work properly.
+* The algorithm will only work fine for the straight lanes.On curved paths, there is a possibility that the slopes of the left lanes and right lane lines may be same, leading to improper identification of the lane.
+* The algorithm will only work fine, when the brightness and the contrast of the image is good, as the algorithm is based on the edge detection technique.
 
-**Step 2:** Open the code in a Jupyter Notebook
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out <A HREF="https://www.packtpub.com/books/content/basics-jupyter-notebook-and-python" target="_blank">Cyrille Rossant's Basics of Jupyter Notebook and Python</A> to get started.
+### 4. Suggest possible improvements to your pipeline
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+* Pre-process the image to adjust the contrast and brightness of the image to properly detect the edges.
 
-`> jupyter notebook`
+* Use homography to view the image from top before edge detection(canny transformation)
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+* Use Image from an infrared camera
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+* Adding an outlier reduction approach like RANSAC on the hough lines.
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
+* Using curve fitting to plot the curve instead of straight lines

@@ -1,8 +1,4 @@
-# **Finding Lane Lines on the Road**
-
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
+# **Lane Detection: Using Edge Detection**
 
 ---
 
@@ -10,7 +6,6 @@
 
 The goals / steps of this project are the following:
 * Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
 
 
 [//]: # (Image References)
@@ -23,10 +18,14 @@ The goals / steps of this project are the following:
 [image6]: ./test_images_output/final_solidYellowLeft.jpg "Result"
 
 ---
+### 1. Results
 
-### Reflection
+<p align="center">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidYellowLeft.gif" width="400" height="270" border="10">
+<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidWhiteRight.gif" width="400" height="270" border="10">
+</p>
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+### 2. Pipeline
 
 My pipeline consisted of 6 steps.
 
@@ -70,13 +69,6 @@ The grayscale image is processed using GaussianBlur to reduce the noise and smoo
  We used this information to draw the lines on the original image.
 
  ![alt text][image6]
-
-### 2. Results
-
-<p align="center">
-<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidYellowLeft.gif" width="400" height="270" border="10">
-<img src="https://github.com/sauravkdeo/CarND-LaneLines-P1/blob/master/test_videos_output/solidWhiteRight.gif" width="400" height="270" border="10">
-</p>
 
 
 ### 3. Identify potential shortcomings with your current pipeline
