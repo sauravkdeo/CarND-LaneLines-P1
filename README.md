@@ -1,4 +1,4 @@
-# **Lane Detection: Using Edge Detection**
+# **Lane Detection**
 
 ---
 
